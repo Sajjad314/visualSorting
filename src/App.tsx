@@ -9,7 +9,7 @@ import { InsertionSort } from "./InsertionSort";
 function App() {
   const [bar, setBar] = useState<number[]>([]);
   const [length, setLength] = useState<number>(8);
-  const [isSorting, setIsSorting] = useState<boolean>(false);
+  const [isSorting, setIsSorting] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLength(parseInt(event.target.value));
@@ -175,9 +175,11 @@ function App() {
   const insertionSortCall = () => {
     let t = bar;
     console.log(t);
+    setIsSorting(!isSorting);
+    console.log();
 
     const animation = InsertionSort(t);
-    console.log(animation);
+    console.log(animation, isSorting);
     const barG = document.getElementsByClassName("bar");
 
     for (let i = 0; i < animation.length; i++) {

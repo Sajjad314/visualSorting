@@ -90,7 +90,6 @@ const Navbar = ({
                 <SelectItem value="Bubble">Bubble Sort</SelectItem>
                 <SelectItem value="Merge">Merge Sort</SelectItem>
                 <SelectItem value="Selection">Selection Sort</SelectItem>
-                <SelectItem value="Quick">Quick Sort</SelectItem>
                 <SelectItem value="Insertion">Insertion Sort</SelectItem>
               </SelectGroup>
             </SelectContent>
