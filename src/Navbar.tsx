@@ -17,7 +17,7 @@ const Navbar = ({
   handleChange,
   generateArray,
   isSorting,
-  setAnimationSpeed,
+  setIsSorting,
 }: {
   buubleSortCall: Function;
   mergeSortCall: Function;
@@ -27,7 +27,7 @@ const Navbar = ({
   handleChange: Function;
   generateArray: Function;
   isSorting: boolean;
-  setAnimationSpeed: React.Dispatch<React.SetStateAction<number>>;
+  setIsSorting: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [selectValue, setSelectValue] = useState<string>("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -37,6 +37,7 @@ const Navbar = ({
   };
 
   const handleFunctionCall = () => {
+    setIsSorting(true);
     if (selectValue === "Bubble") {
       buubleSortCall();
     }
@@ -61,31 +62,16 @@ const Navbar = ({
             <div className="flex gap-3">
               <div className="flex flex-row gap-2">
                 <div className="flex flex-col gap-1">
-                  <div className="flex flex-row gap-2">
-                    <span className="text-white">length: </span>
-                    <input
-                      type="range"
-                      min={3}
-                      max={32}
-                      value={length}
-                      defaultValue={length}
-                      disabled={isSorting}
-                      onChange={(e) => handleChange(e)}
-                    />
-                  </div>
-                  <div className="flex flex-row gap-1">
-                    <span className="text-white">speed: </span>
-                    <input
-                      type="range"
-                      min={50}
-                      max={150}
-                      defaultValue={100}
-                      disabled={isSorting}
-                      onChange={(e) => {
-                        setAnimationSpeed(parseInt(e.target.value));
-                      }}
-                    />
-                  </div>
+                  <input
+                    type="range"
+                    min={3}
+                    max={32}
+                    value={length}
+                    defaultValue={length}
+                    disabled={isSorting}
+                    onChange={(e) => handleChange(e)}
+                  />
+                  <span className="text-white">length: {length}</span>
                 </div>
               </div>
               <button
@@ -145,31 +131,16 @@ const Navbar = ({
           <div className="md:hidden mt-2">
             <div className="flex flex-row gap-2 mt-2">
               <div className="flex flex-col gap-1">
-                <div className="flex flex-row gap-2">
-                  <span className="text-white">length: </span>
-                  <input
-                    type="range"
-                    min={3}
-                    max={32}
-                    value={length}
-                    defaultValue={length}
-                    disabled={isSorting}
-                    onChange={(e) => handleChange(e)}
-                  />
-                </div>
-                <div className="flex flex-row gap-1">
-                  <span className="text-white">speed: </span>
-                  <input
-                    type="range"
-                    min={50}
-                    max={150}
-                    defaultValue={100}
-                    disabled={isSorting}
-                    onChange={(e) => {
-                      setAnimationSpeed(parseInt(e.target.value));
-                    }}
-                  />
-                </div>
+                <input
+                  type="range"
+                  min={3}
+                  max={32}
+                  value={length}
+                  defaultValue={length}
+                  disabled={isSorting}
+                  onChange={(e) => handleChange(e)}
+                />
+                <span className="text-white">length: {length}</span>
               </div>
             </div>
             <button
