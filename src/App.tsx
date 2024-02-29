@@ -10,6 +10,7 @@ function App() {
   const [bar, setBar] = useState<number[]>([]);
   const [length, setLength] = useState<number>(8);
   const [isSorting, setIsSorting] = useState(false);
+  const [animationSpeed, setAnimationSpeed] = useState(100);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLength(parseInt(event.target.value));
@@ -27,6 +28,7 @@ function App() {
   };
 
   const mergeSortCall = () => {
+    setIsSorting(true);
     let t = bar;
     const animations: { first: number; second: number }[] =
       getMergeSortAnimations(t);
@@ -43,7 +45,7 @@ function App() {
         setTimeout(() => {
           barOneStyle.style.backgroundColor = color;
           barTwoStyle.style.backgroundColor = color;
-        }, i * 100);
+        }, i * animationSpeed);
       } else {
         const barStyle = barG[first] as HTMLElement;
         const newHeight = second;
@@ -51,13 +53,16 @@ function App() {
           barStyle.style.height = `${newHeight * 10}px`;
           barStyle.style.marginTop = `${(Math.max(...bar) - newHeight) * 10}px`;
           barStyle.innerHTML = newHeight.toString();
-        }, i * 100);
+        }, i * animationSpeed);
       }
-      if (i === animations.length - 1) setIsSorting(false);
     }
+    setTimeout(() => {
+      setIsSorting(false);
+    }, animations.length * 100);
   };
 
   const bubbleSortCall = () => {
+    setIsSorting(true);
     let t = bar;
     const animation = bubbleSort(t);
     const barG = document.getElementsByClassName("bar");
@@ -73,7 +78,7 @@ function App() {
         setTimeout(() => {
           first.style.backgroundColor = color;
           sec.style.backgroundColor = color;
-        }, i * 100);
+        }, i * animationSpeed);
       } else {
         const first = barG[animation[i - 1].first] as HTMLElement;
         const sec = barG[animation[i - 1].second] as HTMLElement;
@@ -90,13 +95,16 @@ function App() {
           }px`;
           first.innerHTML = animation[i].second.toString();
           sec.innerHTML = animation[i].first.toString();
-        }, i * 100);
+        }, i * animationSpeed);
       }
-      if (i === animation.length - 1) setIsSorting(false);
     }
+    setTimeout(() => {
+      setIsSorting(false);
+    }, animation.length * 100);
   };
 
   const selectionSortCall = () => {
+    setIsSorting(true);
     let t = bar;
     const animation: {
       fix: number;
@@ -124,7 +132,7 @@ function App() {
           setTimeout(() => {
             prevFixElement.style.backgroundColor = "turquoise";
             fixElement.style.backgroundColor = fixColor;
-          }, i * 100);
+          }, i * animationSpeed);
         } else {
           const fixElement = barG[fix] as HTMLElement;
           const compareElement = barG[compare] as HTMLElement;
@@ -133,8 +141,6 @@ function App() {
             ? (compareColor = "turquoise")
             : (compareColor = "green");
           setTimeout(() => {
-            // console.log(animation[i - 1].fix, " ", fix);
-
             if (
               animation[i - 1] &&
               animation[i - 1].fix &&
@@ -145,7 +151,7 @@ function App() {
             }
             fixElement.style.backgroundColor = fixColor;
             compareElement.style.backgroundColor = compareColor;
-          }, i * 100);
+          }, i * animationSpeed);
         }
       } else {
         const first = barG[fix] as HTMLElement;
@@ -154,7 +160,7 @@ function App() {
           setTimeout(() => {
             first.style.backgroundColor = "turquoise";
             sec.style.backgroundColor = "turquoise";
-          }, i * 100);
+          }, i * animationSpeed);
         } else {
           setTimeout(() => {
             first.style.backgroundColor = "red";
@@ -165,21 +171,19 @@ function App() {
             sec.style.marginTop = `${(Math.max(...bar) - secSwap) * 10}px`;
             first.innerHTML = firstSwap.toString();
             sec.innerHTML = secSwap.toString();
-          }, i * 100);
+          }, i * animationSpeed);
         }
       }
-      if (i === animation.length - 1) setIsSorting(false);
     }
+    setTimeout(() => {
+      setIsSorting(false);
+    }, animation.length * 100);
   };
 
   const insertionSortCall = () => {
+    setIsSorting(true);
     let t = bar;
-    console.log(t);
-    setIsSorting(!isSorting);
-    console.log();
-
     const animation = InsertionSort(t);
-    console.log(animation, isSorting);
     const barG = document.getElementsByClassName("bar");
 
     for (let i = 0; i < animation.length; i++) {
@@ -200,12 +204,12 @@ function App() {
           setTimeout(() => {
             currentBar.style.backgroundColor = currentCol;
             compareBar.style.backgroundColor = compareColor;
-          }, i * 100);
+          }, i * animationSpeed);
         } else {
           if (status !== "currentColor") currentCol = "turquoise";
           setTimeout(() => {
             currentBar.style.backgroundColor = currentCol;
-          }, i * 100);
+          }, i * animationSpeed);
         }
       } else {
         if (status === "swap_begin") {
@@ -223,24 +227,24 @@ function App() {
             }px`;
             currentBar.innerHTML = firstSwap.toString();
             compareBar.innerHTML = secSwap.toString();
-          }, i * 100);
+          }, i * animationSpeed);
         } else {
           setTimeout(() => {
             currentBar.style.backgroundColor = "#CB7337";
             compareBar.style.backgroundColor = "turquoise";
-          }, i * 100);
+          }, i * animationSpeed);
         }
       }
-      if (i === animation.length - 1) setIsSorting(false);
     }
+    setTimeout(() => {
+      setIsSorting(false);
+    }, animation.length * 100);
   };
 
   useEffect(() => {
     generateArray();
   }, [length]);
-  useEffect(() => {
-    console.log(isSorting);
-  }, [isSorting]);
+
   return (
     <div className="bg-white w-full h-screen">
       <Navbar
@@ -252,7 +256,7 @@ function App() {
         handleChange={handleChange}
         length={length}
         isSorting={isSorting}
-        setIsSorting={setIsSorting}
+        setAnimationSpeed={setAnimationSpeed}
       />
       <div className=" mt-[100] mx-12 ">
         <div className="flex flex-row w-full justify-center">
