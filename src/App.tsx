@@ -260,10 +260,11 @@ function App() {
             return (
               <div
                 key={i}
-                className="bar min-w-8"
+                className={`bar sm:min-w-2  lg:min-w-8 md:min-w-4`}
                 style={{
                   height: `${b * 10}px`,
                   margin: "0 1px",
+                  fontSize: "9px",
                   marginTop: `${(Math.max(...bar) - b) * 10}px`,
                   backgroundColor: "turquoise",
                 }}
