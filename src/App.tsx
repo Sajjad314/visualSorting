@@ -1,18 +1,25 @@
 import { useEffect, useState } from "react";
-import { getMergeSortAnimations } from "./MergeSort";
-import { bubbleSort } from "./BubbleSort";
+import { getMergeSortAnimations } from "./algorithms/MergeSort";
+import { bubbleSort } from "./algorithms/BubbleSort";
 import { objectsAreEqual } from "./utils/isEqual";
 import Navbar from "./Navbar";
-import { SelectionSort } from "./SelectionSort";
-import { InsertionSort } from "./InsertionSort";
+import { SelectionSort } from "./algorithms/SelectionSort";
+import { InsertionSort } from "./algorithms/InsertionSort";
 
 function App() {
   const [bar, setBar] = useState<number[]>([]);
   const [length, setLength] = useState<number>(8);
   const [isSorting, setIsSorting] = useState(false);
+  const [speed, setSpeed] = useState(100);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLength(parseInt(event.target.value));
+  };
+  useEffect(() => {
+    console.log(speed);
+  }, [speed]);
+  const handleSpeedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSpeed(Math.abs(parseInt(event.target.value) - 150) + 50);
   };
 
   const generateArray = () => {
@@ -27,7 +34,7 @@ function App() {
   };
 
   const mergeSortCall = () => {
-    let t = bar;
+    let t = [...bar];
     const animations: { first: number; second: number }[] =
       getMergeSortAnimations(t);
 
@@ -43,7 +50,7 @@ function App() {
         setTimeout(() => {
           barOneStyle.style.backgroundColor = color;
           barTwoStyle.style.backgroundColor = color;
-        }, i * 100);
+        }, i * speed);
       } else {
         const barStyle = barG[first] as HTMLElement;
         const newHeight = second;
@@ -51,14 +58,19 @@ function App() {
           barStyle.style.height = `${newHeight * 10}px`;
           barStyle.style.marginTop = `${(Math.max(...bar) - newHeight) * 10}px`;
           barStyle.innerHTML = newHeight.toString();
-        }, i * 100);
+        }, i * speed);
       }
-      if (i === animations.length - 1) setIsSorting(false);
+      if (i === animations.length - 1) {
+        setTimeout(() => {
+          setIsSorting(false);
+          console.log(isSorting);
+        }, i * speed);
+      }
     }
   };
 
   const bubbleSortCall = () => {
-    let t = bar;
+    const t = [...bar];
     const animation = bubbleSort(t);
     const barG = document.getElementsByClassName("bar");
     for (let i = 0; i < animation.length; i++) {
@@ -73,7 +85,7 @@ function App() {
         setTimeout(() => {
           first.style.backgroundColor = color;
           sec.style.backgroundColor = color;
-        }, i * 100);
+        }, i * speed);
       } else {
         const first = barG[animation[i - 1].first] as HTMLElement;
         const sec = barG[animation[i - 1].second] as HTMLElement;
@@ -90,14 +102,19 @@ function App() {
           }px`;
           first.innerHTML = animation[i].second.toString();
           sec.innerHTML = animation[i].first.toString();
-        }, i * 100);
+        }, i * speed);
       }
-      if (i === animation.length - 1) setIsSorting(false);
+      if (i === animation.length - 1) {
+        setTimeout(() => {
+          setIsSorting(false);
+          console.log(isSorting);
+        }, i * speed);
+      }
     }
   };
 
   const selectionSortCall = () => {
-    let t = bar;
+    let t = [...bar];
     const animation: {
       fix: number;
       compare: number;
@@ -124,7 +141,7 @@ function App() {
           setTimeout(() => {
             prevFixElement.style.backgroundColor = "turquoise";
             fixElement.style.backgroundColor = fixColor;
-          }, i * 100);
+          }, i * speed);
         } else {
           const fixElement = barG[fix] as HTMLElement;
           const compareElement = barG[compare] as HTMLElement;
@@ -145,7 +162,7 @@ function App() {
             }
             fixElement.style.backgroundColor = fixColor;
             compareElement.style.backgroundColor = compareColor;
-          }, i * 100);
+          }, i * speed);
         }
       } else {
         const first = barG[fix] as HTMLElement;
@@ -154,7 +171,7 @@ function App() {
           setTimeout(() => {
             first.style.backgroundColor = "turquoise";
             sec.style.backgroundColor = "turquoise";
-          }, i * 100);
+          }, i * speed);
         } else {
           setTimeout(() => {
             first.style.backgroundColor = "red";
@@ -165,21 +182,23 @@ function App() {
             sec.style.marginTop = `${(Math.max(...bar) - secSwap) * 10}px`;
             first.innerHTML = firstSwap.toString();
             sec.innerHTML = secSwap.toString();
-          }, i * 100);
+          }, i * speed);
         }
       }
-      if (i === animation.length - 1) setIsSorting(false);
+      if (i === animation.length - 1) {
+        setTimeout(() => {
+          setIsSorting(false);
+          console.log(isSorting);
+        }, i * speed);
+      }
     }
   };
 
   const insertionSortCall = () => {
-    let t = bar;
-    console.log(t);
-    setIsSorting(!isSorting);
+    let t = [...bar];
     console.log();
 
     const animation = InsertionSort(t);
-    console.log(animation, isSorting);
     const barG = document.getElementsByClassName("bar");
 
     for (let i = 0; i < animation.length; i++) {
@@ -200,12 +219,12 @@ function App() {
           setTimeout(() => {
             currentBar.style.backgroundColor = currentCol;
             compareBar.style.backgroundColor = compareColor;
-          }, i * 100);
+          }, i * speed);
         } else {
           if (status !== "currentColor") currentCol = "turquoise";
           setTimeout(() => {
             currentBar.style.backgroundColor = currentCol;
-          }, i * 100);
+          }, i * speed);
         }
       } else {
         if (status === "swap_begin") {
@@ -223,24 +242,27 @@ function App() {
             }px`;
             currentBar.innerHTML = firstSwap.toString();
             compareBar.innerHTML = secSwap.toString();
-          }, i * 100);
+          }, i * speed);
         } else {
           setTimeout(() => {
             currentBar.style.backgroundColor = "#CB7337";
             compareBar.style.backgroundColor = "turquoise";
-          }, i * 100);
+          }, i * speed);
         }
       }
-      if (i === animation.length - 1) setIsSorting(false);
+      if (i === animation.length - 1) {
+        setTimeout(() => {
+          setIsSorting(false);
+          console.log(isSorting);
+        }, i * speed);
+      }
     }
   };
 
   useEffect(() => {
     generateArray();
   }, [length]);
-  useEffect(() => {
-    console.log(isSorting);
-  }, [isSorting]);
+
   return (
     <div className="bg-white w-full h-screen">
       <Navbar
@@ -250,6 +272,7 @@ function App() {
         insertionSortCall={insertionSortCall}
         generateArray={generateArray}
         handleChange={handleChange}
+        handleSpeedChange={handleSpeedChange}
         length={length}
         isSorting={isSorting}
         setIsSorting={setIsSorting}

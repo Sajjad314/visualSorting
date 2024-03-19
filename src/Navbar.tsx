@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../@/components/ui/select";
+import { Speed } from "./const/SortingSpeed";
 
 const Navbar = ({
   buubleSortCall,
@@ -14,6 +15,7 @@ const Navbar = ({
   selectionSortCall,
   insertionSortCall,
   length,
+  handleSpeedChange,
   handleChange,
   generateArray,
   isSorting,
@@ -25,12 +27,16 @@ const Navbar = ({
   insertionSortCall: Function;
   length: number;
   handleChange: Function;
+  handleSpeedChange: Function;
   generateArray: Function;
   isSorting: boolean;
   setIsSorting: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [selectValue, setSelectValue] = useState<string>("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [speed, setSpeed] = useState(100);
+
+  const { MAX_SPEED, MIN_SPEED } = Speed;
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -51,6 +57,12 @@ const Navbar = ({
       insertionSortCall();
     }
   };
+
+  useEffect(() => {
+    if (isSorting) {
+      setIsMenuOpen(false);
+    }
+  }, [isSorting]);
   return (
     <nav className="bg-gray-800 p-4 mb-4 w-full">
       <div className="max-w-7xl mx-auto px-4">
@@ -61,17 +73,32 @@ const Navbar = ({
           <div className="hidden md:block ">
             <div className="flex gap-3">
               <div className="flex flex-row gap-2">
-                <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-1">
+                  <span className="text-white">length: </span>
                   <input
                     type="range"
                     min={3}
                     max={32}
                     value={length}
-                    defaultValue={length}
                     disabled={isSorting}
                     onChange={(e) => handleChange(e)}
                   />
-                  <span className="text-white">length: {length}</span>
+                </div>
+              </div>
+              <div className="flex flex-row gap-2">
+                <div className="flex items-center gap-1">
+                  <span className="text-white">Speed: </span>
+                  <input
+                    type="range"
+                    min={MAX_SPEED}
+                    max={MIN_SPEED}
+                    value={speed}
+                    disabled={isSorting}
+                    onChange={(e) => {
+                      handleSpeedChange(e);
+                      setSpeed(parseInt(e.target.value));
+                    }}
+                  />
                 </div>
               </div>
               <button
@@ -130,17 +157,33 @@ const Navbar = ({
         {isMenuOpen && (
           <div className="md:hidden mt-2">
             <div className="flex flex-row gap-2 mt-2">
-              <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-1">
+                <span className="text-white">length: </span>
+
                 <input
                   type="range"
                   min={3}
                   max={32}
                   value={length}
-                  defaultValue={length}
                   disabled={isSorting}
                   onChange={(e) => handleChange(e)}
                 />
-                <span className="text-white">length: {length}</span>
+              </div>
+            </div>
+            <div className="flex flex-row gap-2">
+              <div className="flex items-center gap-1">
+                <span className="text-white">Speed: </span>
+                <input
+                  type="range"
+                  min={MAX_SPEED}
+                  max={MIN_SPEED}
+                  value={speed}
+                  disabled={isSorting}
+                  onChange={(e) => {
+                    handleSpeedChange(e);
+                    setSpeed(parseInt(e.target.value));
+                  }}
+                />
               </div>
             </div>
             <button
